@@ -1,6 +1,6 @@
 # CyberSecurity Beginner Handbook
 
-Welcome to a [CyberSecurity Beginner Handbook](https://this-is-emma.github.io/Journey-into-CyberSec/): the Cybersecurity Starter's Treasure Trove!
+Welcome to a [CyberSecurity Beginner Handbook](https://this-is-emma.github.io/CyberSec-Beginner-Handbook/): the Cybersecurity Starter's Treasure Trove!
 
 Dive into a curated collection of knowledge, gleaned from learning platforms, CTF challenges, and personal exploration.
 

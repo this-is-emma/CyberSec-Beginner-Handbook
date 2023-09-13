@@ -1,0 +1,11 @@
+{
+  "name": "breaking-into-cybersec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Edith Sakatia <edith@email.com>",
+  "license": "ISC"
+}

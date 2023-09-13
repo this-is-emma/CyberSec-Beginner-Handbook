@@ -1,4 +1,4 @@
-# Breaking Into CyberSecurity
+# CyberSecurity Beginner Handbook
 
 Welcome to a A journey into CyberSec 🚗 🧳: the Cybersecurity Starter's Treasure Trove!
 

@@ -1,6 +1,6 @@
 # **Welcome**
 
-Welcome to a A journey into CyberSec 🚗 🧳: the Cybersecurity Starter's Treasure Trove!
+Welcome to a CyberSecurity Beginner Handbook 📒: the Cybersecurity Starter's Treasure Trove!
 
 Dive into a curated collection of knowledge, gleaned from learning platforms, CTF challenges, and personal exploration.
 

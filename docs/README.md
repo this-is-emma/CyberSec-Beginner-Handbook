@@ -147,17 +147,21 @@ which ports are filtered. (BETTER TO USE TO EVADE FIREWALL?)
 
 **`-PE`** performs the ping scan by using ICMP Echo requests
 
-**`-Pn`**   deactivate the ICMP echo requests
+**`-Pn`**   deactivate the ICMP echo requests. This instructs Nmap not to perform the host discovery and scan the target **regardless of whether it responds to ping requests or not.**
 
 **`--packet-trace`**  shows all packets sent and received
 
 **`--reason`**  displays the reason for the specific result
 
-**`-n`** disable DNS resolution
+**`-n`** disable DNS resolution. Nmap will not attempt to resolve hostnames to IP addresses. This speeds up the process if DNS res is not necessary. 
 
 **`-sV`** get additional available information from the open ports. identify versions, service names, and details about our target.
 
-**`--disable-arp-ping`**  disable ARP ping  (see example of command `sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping`)
+**`--disable-arp-ping`**  disable ARP ping  (see example of command `sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping`). This option disables ARP (Address Resolution Protocol) ping probes. ARP ping is a host discovery technique used to check if a host is active on a local network. Disabling it can be helpful when scanning remote hosts or in situations where ARP ping is not effective.
+
+**--source-port XX**: This option specifies a source port of XX for outgoing packets. The source port is the port number used in the outgoing packets from Nmap. 
+
+*****IMPORTANT** Setting it to 53 makes it appear as if the traffic is DNS-related, which can be useful for evading certain firewall rules or detection mechanisms that allow DNS traffic.***
 
 **`-oA something`** store the result in a file in all fomat starting with the name ‘something’
 

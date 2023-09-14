@@ -147,21 +147,22 @@ which ports are filtered. (BETTER TO USE TO EVADE FIREWALL?)
 
 **`-PE`** performs the ping scan by using ICMP Echo requests
 
-**`-Pn`**   deactivate the ICMP echo requests. This instructs Nmap not to perform the host discovery and scan the target **regardless of whether it responds to ping requests or not.**
+**`-Pn`** 🚅   deactivate the ICMP echo requests. This instructs Nmap not to perform the host discovery and scan the target **regardless of whether it responds to ping requests or not.**. Can help speed up the request.
 
 **`--packet-trace`**  shows all packets sent and received
 
 **`--reason`**  displays the reason for the specific result
 
-**`-n`** disable DNS resolution. Nmap will not attempt to resolve hostnames to IP addresses. This speeds up the process if DNS res is not necessary. 
+**`-n`** 🚅 disable DNS resolution. Nmap will not attempt to resolve hostnames to IP addresses. This speeds up the process if DNS res is not necessary.
 
 **`-sV`** get additional available information from the open ports. identify versions, service names, and details about our target.
 
-**`--disable-arp-ping`**  disable ARP ping  (see example of command `sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping`). This option disables ARP (Address Resolution Protocol) ping probes. ARP ping is a host discovery technique used to check if a host is active on a local network. Disabling it can be helpful when scanning remote hosts or in situations where ARP ping is not effective.
+**`--disable-arp-ping`** 🥷🚅 disable ARP ping  (see example of command `sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping`). This option disables ARP (Address Resolution Protocol) ping probes. ARP ping is a host discovery technique used to check if a host is active on a local network. Disabling it can be helpful when scanning remote hosts or in situations where ARP ping is not effective.
+💡 ***ARP probles can be picked up by an IDS in some situations so disabling it may make our request more stealthy. Also makes request faster as nmap will not wait for a response.***
 
-**--source-port XX**: This option specifies a source port of XX for outgoing packets. The source port is the port number used in the outgoing packets from Nmap. 
+**`--source-port XX`** 🥷: This option specifies a source port of XX for outgoing packets. The source port is the port number used in the outgoing packets from Nmap.
 
-*****IMPORTANT** Setting it to 53 makes it appear as if the traffic is DNS-related, which can be useful for evading certain firewall rules or detection mechanisms that allow DNS traffic.***
+ 💡 ***Setting it to 53 makes it appear as if the traffic is DNS-related, which can be useful for evading certain firewall rules or detection mechanisms that allow DNS traffic.***
 
 **`-oA something`** store the result in a file in all fomat starting with the name ‘something’
 
@@ -314,9 +315,9 @@ abbreviated as "nc", the "Swiss Army knife" of networking tools due to its wide 
 * Proxying and Port Forwarding: Netcat can act as a proxy server or perform port forwarding.
 * Chat Server: It can also function as a basic chat server
 
-## Banner grabbing**
+## Banner grabbing
 
-`nc -nv 10.129.42.190 **22**`  (where ******22****** is the port!)
+`nc -nv 10.129.42.190 22`  (where **22** is the port!)
 
 Breaking down the command:
 
@@ -327,6 +328,7 @@ Breaking down the command:
 - `10.129.42.190`: This is the IP address of the target host that you want to establish a connection with.
 - `22`: This is the port number you want to connect to. In this case, it's port `22`, which is typically used for SSH connections.
 
+💡 ***You can also specify the source port your nc request should be coming from with **-p X**, where X is the port #***
 # FTP
 
 ## What is it

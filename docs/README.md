@@ -155,6 +155,12 @@ which ports are filtered. (BETTER TO USE TO EVADE FIREWALL?)
 
 **`-n`** 🚅 disable DNS resolution. Nmap will not attempt to resolve hostnames to IP addresses. This speeds up the process if DNS res is not necessary.
 
+**`-O`** Enable OS detection
+
+**`-Tx`** 🥷 set scanning pace (x stands for a digit between 0 and 5 where `T0` is slow,  `T3` is the default timing pace and `T5` is fastest) 
+
+**`-f`** 🥷  fragment packets, sometimes useful to evade older firewalls 
+
 **`-sV`** get additional available information from the open ports. identify versions, service names, and details about our target.
 
 **`--disable-arp-ping`** 🥷🚅 disable ARP ping  (see example of command `sudo nmap 10.129.2.28 -p 21 --packet-trace -Pn -n --disable-arp-ping`). This option disables ARP (Address Resolution Protocol) ping probes. ARP ping is a host discovery technique used to check if a host is active on a local network. Disabling it can be helpful when scanning remote hosts or in situations where ARP ping is not effective.
